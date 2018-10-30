@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubeservice-deployment
+  labels:
+    app: kubeservice
+spec:
+  replicas: 3
+  template:
+    metadata:
+      name: kubeservice
+      labels:
+        app: kubeservice
+    spec:
+      containers:
+      - name: kubeservice
+        image: vvkubeserviceacr.azurecr.io/kubeservice:v1
+        imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: kubeservice
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: kubeservice-service
+spec:
+  selector:
+    app: kubeservice
+  ports:
+    - port: 80
+  type: LoadBalancer
+  
+  
